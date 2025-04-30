@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form Absen</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f0f0f0;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Form Absen</h2>
+  <form id="absenForm">
+    <input type="text" id="nama" name="nama" placeholder="Nama Lengkap" required>
+    <input type="text" id="kelas" name="kelas" placeholder="Kelas" required>
+    <button type="submit">Kirim Absen</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("absenForm");
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = {
+        nama: form.nama.value,
+        kelas: form.kelas.value
+      };
+
+      const res = await fetch("/api/kirim-wa", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      alert(result.message);
+      if (result.waLink) {
+        window.open(result.waLink, "_blank");
+      }
+    });
+  </script>
+</body>
+</html>
